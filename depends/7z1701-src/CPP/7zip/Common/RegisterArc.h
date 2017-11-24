@@ -24,7 +24,7 @@ struct CArcInfo
   bool IsMultiSignature() const { return (Flags & NArcInfoFlags::kMultiSignature) != 0; }
 };
 
-void RegisterArc(const CArcInfo *arcInfo) throw();
+void __fastcall RegisterArc(const CArcInfo *arcInfo) throw();
 
 
 #define IMP_CreateArcIn_2(c) \
@@ -45,7 +45,8 @@ void RegisterArc(const CArcInfo *arcInfo) throw();
 #define REGISTER_ARC_R(n, e, ae, id, sigSize, sig, offs, flags, crIn, crOut, isArc) \
   REGISTER_ARC_V(n, e, ae, id, sigSize, sig, offs, flags, crIn, crOut, isArc) \
   struct CRegisterArc { CRegisterArc() { RegisterArc(&g_ArcInfo); }}; \
-  static CRegisterArc g_RegisterArc;
+  static CRegisterArc g_RegisterArc; \
+  void* __stdcall getRegInfo() { return (void*)&g_RegisterArc; }
 
 
 #define REGISTER_ARC_I_CLS(cls, n, e, ae, id, sig, offs, flags, isArc) \
@@ -73,6 +74,7 @@ void RegisterArc(const CArcInfo *arcInfo) throw();
   IMP_CreateArcOut \
   REGISTER_ARC_V(n, e, ae, id, ARRAY_SIZE(sig), sig, offs, flags, CreateArc, CreateArcOut, isArc) \
   struct CRegisterArcDecSig { CRegisterArcDecSig() { sig[0]--; RegisterArc(&g_ArcInfo); }}; \
-  static CRegisterArcDecSig g_RegisterArc;
+  static CRegisterArcDecSig g_RegisterArc; \
+  void* __stdcall getRegInfo() { return (void*)&g_RegisterArc; }
 
 #endif

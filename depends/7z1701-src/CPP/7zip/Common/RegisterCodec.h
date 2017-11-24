@@ -28,9 +28,13 @@ void RegisterCodec(const CCodecInfo *codecInfo) throw();
 #define REGISTER_CODEC_NAME(x) CRegisterCodec ## x
 #define REGISTER_CODEC_VAR static const CCodecInfo g_CodecInfo =
 
+#define REGISTER_CODEC_GETTER_NAME(x) CRegisterCodecGetter ## x
+
+
 #define REGISTER_CODEC(x) struct REGISTER_CODEC_NAME(x) { \
     REGISTER_CODEC_NAME(x)() { RegisterCodec(&g_CodecInfo); }}; \
-    static REGISTER_CODEC_NAME(x) g_RegisterCodec;
+    static REGISTER_CODEC_NAME(x) g_RegisterCodec; \
+    void* __stdcall REGISTER_CODEC_GETTER_NAME(x)() { return (void*)&g_RegisterCodec; }
 
 
 #define REGISTER_CODECS_NAME(x) CRegisterCodecs ## x
@@ -95,12 +99,14 @@ struct CHasherInfo
 void RegisterHasher(const CHasherInfo *hasher) throw();
 
 #define REGISTER_HASHER_NAME(x) CRegHasher_ ## x
+#define REGISTER_HASHER_GETTER_NAME(x) CRegHasherGetter_ ## x
 
 #define REGISTER_HASHER(cls, id, name, size) \
     STDMETHODIMP_(UInt32) cls::GetDigestSize() throw() { return size; } \
     static IHasher *CreateHasherSpec() { return new cls(); } \
     static const CHasherInfo g_HasherInfo = { CreateHasherSpec, id, name, size }; \
     struct REGISTER_HASHER_NAME(cls) { REGISTER_HASHER_NAME(cls)() { RegisterHasher(&g_HasherInfo); }}; \
-    static REGISTER_HASHER_NAME(cls) g_RegisterHasher;
+    static REGISTER_HASHER_NAME(cls) g_RegisterHasher; \
+    void* __stdcall REGISTER_HASHER_GETTER_NAME(cls)() { return (void*)&g_RegisterHasher; }
 
 #endif

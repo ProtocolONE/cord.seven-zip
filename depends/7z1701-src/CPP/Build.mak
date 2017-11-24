@@ -105,6 +105,11 @@ LFLAGS = $(LFLAGS) /SUBSYSTEM:windows,$(MY_SUB_SYS_VER)
 
 
 PROGPATH = $O\$(PROG)
+!IFDEF STATIC_LIB
+LINKER=lib
+!ELSE
+LINKER=link
+!ENDIF
 
 COMPL_O1   = $(CC) $(CFLAGS_O1) $**
 COMPL_O2   = $(CC) $(CFLAGS_O2) $**
@@ -132,7 +137,7 @@ $O/Asm:
 	if not exist "$O/Asm" mkdir "$O/Asm"
 
 $(PROGPATH): $O $O/Asm $(OBJS) $(DEF_FILE)
-	link $(LFLAGS) -out:$(PROGPATH) $(OBJS) $(LIBS)
+	$(LINKER) $(LFLAGS) -out:$(PROGPATH) $(OBJS) $(LIBS)
 
 !IFNDEF NO_DEFAULT_RES
 $O\resource.res: $(*B).rc

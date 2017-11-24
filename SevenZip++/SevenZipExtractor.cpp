@@ -9,6 +9,9 @@
 #include "OpenArchiveException.h"
 #include "ExtractArchiveException.h"
 
+#include "MemoryInStream.h"
+#include "ArchiveExtractToMemoryCallback.h";
+
 namespace SevenZip
 {
 
@@ -36,6 +39,12 @@ CComPtr< IInArchive > GetArchiveReader( const SevenZipLibrary& library, const Co
 }
 
 
+SevenZipExtractor::SevenZipExtractor(const SevenZipLibrary& library)
+  : m_library(library)
+  , m_format(CompressionFormat::SevenZip)
+{
+}
+
 SevenZipExtractor::SevenZipExtractor( const SevenZipLibrary& library, const TString& archivePath )
 	: m_library( library )
 	, m_archivePath( archivePath )
@@ -50,6 +59,51 @@ SevenZipExtractor::~SevenZipExtractor()
 void SevenZipExtractor::SetCompressionFormat( const CompressionFormatEnum& format )
 {
 	m_format = format;
+}
+
+void SevenZipExtractor::ExtractArchiveFromMemory(std::vector<unsigned char> buffer, const TString& destDirectory)
+{
+  CComPtr< IInArchive > archive = GetArchiveReader(m_library, m_format);
+  CComPtr< MemoryInStream > inFile = new MemoryInStream(buffer);
+  CComPtr< ArchiveOpenCallback > openCallback = new ArchiveOpenCallback();
+
+  HRESULT hr = archive->Open(inFile, 0, openCallback);
+  if (hr != S_OK)
+  {
+    throw OpenArchiveException(GetCOMErrMsg(_T("Open archive"), hr), hr);
+  }
+
+  CComPtr< ArchiveExtractCallback > extractCallback = new ArchiveExtractCallback(archive, destDirectory);
+
+  //UInt32 indices[] = { 0 };
+  //hr = archive->Extract(indices, 1, false, extractCallback);
+  hr = archive->Extract(NULL, -1, false, extractCallback);
+  if (hr != S_OK) // returning S_FALSE also indicates error
+  {
+    throw ExtractArchiveException(GetCOMErrMsg(_T("Extract archive"), hr), hr);
+  }
+}
+
+
+void SevenZipExtractor::ExtractArchiveFromMemory(std::vector<unsigned char> buffer, std::unordered_map<std::wstring, std::vector<unsigned char> >& result)
+{
+  CComPtr< IInArchive > archive = GetArchiveReader(m_library, m_format);
+  CComPtr< MemoryInStream > inFile = new MemoryInStream(buffer);
+  CComPtr< ArchiveOpenCallback > openCallback = new ArchiveOpenCallback();
+
+  HRESULT hr = archive->Open(inFile, 0, openCallback);
+  if (hr != S_OK)
+  {
+    throw OpenArchiveException(GetCOMErrMsg(_T("Open archive"), hr), hr);
+  }
+
+  CComPtr< ArchiveExtractToMemoryCallback > extractCallback = new ArchiveExtractToMemoryCallback(archive, result);
+
+  hr = archive->Extract(NULL, -1, false, extractCallback);
+  if (hr != S_OK) // returning S_FALSE also indicates error
+  {
+    throw ExtractArchiveException(GetCOMErrMsg(_T("Extract archive"), hr), hr);
+  }
 }
 
 void SevenZipExtractor::ExtractArchive( const TString& destDirectory )

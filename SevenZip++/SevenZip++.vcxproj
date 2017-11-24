@@ -28,27 +28,27 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v120_xp</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v120_xp</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v120_xp</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v120_xp</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -87,7 +87,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\External\lzma\CPP;$(QGNACOMMONDIR)\7zip\7zip-sdk-9.22Beta\CPP;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)depends\7z1701-src\CPP;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
@@ -96,7 +96,11 @@
     </Link>
     <Lib>
       <OutputFile>$(TargetPath)</OutputFile>
+      <AdditionalDependencies>$(SolutionDir)depends\7z1701-bin\lib\7za.lib</AdditionalDependencies>
     </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -119,7 +123,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\External\lzma\CPP;$(QGNACOMMONDIR)\7zip\7zip-sdk-9.22Beta\CPP;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)depends\7z1701-src\CPP;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
@@ -130,6 +134,7 @@
     </Link>
     <Lib>
       <OutputFile>$(TargetPath)</OutputFile>
+      <AdditionalDependencies>$(SolutionDir)depends\7z1701-bin\lib\7za.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -151,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ArchiveExtractCallback.h" />
+    <ClInclude Include="ArchiveExtractToMemoryCallback.h" />
     <ClInclude Include="ArchiveOpenCallback.h" />
     <ClInclude Include="ArchiveUpdateCallback.h" />
     <ClInclude Include="CompressionFormat.h" />
@@ -161,6 +167,8 @@
     <ClInclude Include="FileSys.h" />
     <ClInclude Include="GUIDs.h" />
     <ClInclude Include="InStreamWrapper.h" />
+    <ClInclude Include="MemoryInStream.h" />
+    <ClInclude Include="MemoryOutStream.h" />
     <ClInclude Include="OpenArchiveException.h" />
     <ClInclude Include="OutStreamWrapper.h" />
     <ClInclude Include="PathScanner.h" />
@@ -175,12 +183,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArchiveExtractCallback.cpp" />
+    <ClCompile Include="ArchiveExtractToMemoryCallback.cpp" />
     <ClCompile Include="ArchiveOpenCallback.cpp" />
     <ClCompile Include="ArchiveUpdateCallback.cpp" />
     <ClCompile Include="ExtractArchiveException.cpp" />
     <ClCompile Include="FileSys.cpp" />
     <ClCompile Include="GUIDs.cpp" />
     <ClCompile Include="InStreamWrapper.cpp" />
+    <ClCompile Include="MemoryInStream.cpp" />
+    <ClCompile Include="MemoryOutStream.cpp" />
     <ClCompile Include="OpenArchiveException.cpp" />
     <ClCompile Include="OutStreamWrapper.cpp" />
     <ClCompile Include="PathScanner.cpp" />

@@ -4,6 +4,7 @@
 #include "SevenZipLibrary.h"
 #include "CompressionFormat.h"
 
+#include <unordered_map>
 
 namespace SevenZip
 {
@@ -17,12 +18,15 @@ namespace SevenZip
 
 	public:
 
+    SevenZipExtractor(const SevenZipLibrary& library);
 		SevenZipExtractor( const SevenZipLibrary& library, const TString& archivePath );
 		virtual ~SevenZipExtractor();
 
 		void SetCompressionFormat( const CompressionFormatEnum& format );
 
 		virtual void ExtractArchive( const TString& directory );
+    void ExtractArchiveFromMemory(std::vector<unsigned char> buffer, const TString& destDirectory);
+    void ExtractArchiveFromMemory(std::vector<unsigned char> buffer, std::unordered_map<std::wstring, std::vector<unsigned char> >& result);
 
 	private:
 

@@ -1,8 +1,15 @@
+
+
 #include <stdio.h>
 #include <tchar.h>
 #include "../../SevenZip++/SevenZipCompressor.h"
 #include "../../SevenZip++/SevenZipExtractor.h"
+#include "../../SevenZip++/CompressionFormat.h"
 
+#include <fstream>
+#include <vector>
+#include <iterator>
+#include <iostream>
 
 int PrintUsage()
 {
@@ -31,6 +38,29 @@ int CreateArchive(int argc, TCHAR** argv)
 	return 0;
 }
 
+std::vector<unsigned char> readFile(const TCHAR* filename)
+{
+  DWORD cbRead;
+  HANDLE hFile = ::CreateFile(filename,
+    GENERIC_READ,
+    FILE_SHARE_READ,
+    NULL,
+    OPEN_EXISTING,
+    FILE_ATTRIBUTE_NORMAL,
+    NULL);
+
+  DWORD hsize = 0;
+  DWORD size = GetFileSize(hFile, &size);
+
+  std::vector<unsigned char> result;
+  result.resize(size);
+
+  ::ReadFile(hFile, result.data(), result.size(), &cbRead, NULL);
+  ::CloseHandle(hFile);
+
+  return result;
+}
+
 int ExtractArchive(int argc, TCHAR** argv)
 {
 	if (argc < 4)
@@ -45,7 +75,17 @@ int ExtractArchive(int argc, TCHAR** argv)
 	lib.Load();
 
 	SevenZip::SevenZipExtractor extractor(lib, archiveName);
-	extractor.ExtractArchive(destination);
+	//extractor.ExtractArchive(destination);
+	
+  std::vector<unsigned char> memoryArchive = readFile(archiveName);
+
+  std::unordered_map<std::wstring, std::vector<unsigned char> > result;
+  //SevenZip::SevenZipExtractor extractor(lib);
+  //extractor.ExtractArchive(destination);
+  //extractor.ExtractArchiveFromMemory(memoryArchive, destination);
+  extractor.ExtractArchiveFromMemory(memoryArchive, result);
+
+  std::cout << result[L"update.crc"].data() << std::endl;
 	return 0;
 }
 

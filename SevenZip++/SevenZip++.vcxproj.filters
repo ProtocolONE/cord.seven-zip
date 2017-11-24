@@ -81,6 +81,15 @@
     <ClInclude Include="ExtractArchiveException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MemoryInStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ArchiveExtractToMemoryCallback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryOutStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -129,6 +138,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ExtractArchiveException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryInStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ArchiveExtractToMemoryCallback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryOutStream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -75,15 +75,12 @@ void SevenZipExtractor::ExtractArchiveFromMemory(std::vector<unsigned char> buff
 
   CComPtr< ArchiveExtractCallback > extractCallback = new ArchiveExtractCallback(archive, destDirectory);
 
-  //UInt32 indices[] = { 0 };
-  //hr = archive->Extract(indices, 1, false, extractCallback);
   hr = archive->Extract(NULL, -1, false, extractCallback);
   if (hr != S_OK) // returning S_FALSE also indicates error
   {
     throw ExtractArchiveException(GetCOMErrMsg(_T("Extract archive"), hr), hr);
   }
 }
-
 
 void SevenZipExtractor::ExtractArchiveFromMemory(std::vector<unsigned char> buffer, std::unordered_map<std::wstring, std::vector<unsigned char> >& result)
 {
@@ -127,7 +124,6 @@ void SevenZipExtractor::ExtractArchive( const CComPtr< IStream >& archiveStream,
 	if ( hr != S_OK )
 	{
     throw OpenArchiveException(GetCOMErrMsg( _T( "Open archive" ), hr ), hr);
-		//throw SevenZipException( GetCOMErrMsg( _T( "Open archive" ), hr ) );
 	}
 
 	CComPtr< ArchiveExtractCallback > extractCallback = new ArchiveExtractCallback( archive, destDirectory );
@@ -136,7 +132,6 @@ void SevenZipExtractor::ExtractArchive( const CComPtr< IStream >& archiveStream,
 	if ( hr != S_OK ) // returning S_FALSE also indicates error
 	{
     throw ExtractArchiveException( GetCOMErrMsg( _T( "Extract archive" ), hr ), hr );
-		//throw SevenZipException( GetCOMErrMsg( _T( "Extract archive" ), hr ) );
 	}
 }
 

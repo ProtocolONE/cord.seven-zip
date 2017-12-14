@@ -28,7 +28,12 @@ OBJS = \
   $(CRYPTO_OBJS) \
   $(C_OBJS) \
   $(ASM_OBJS) \
-  $O\resource.res \
+
+
+!IFNDEF NO_DEFAULT_RES
+OBJS = $(OBJS) \
+  $O\resource.res
+!ENDIF
 
 !include "../../../Build.mak"
 

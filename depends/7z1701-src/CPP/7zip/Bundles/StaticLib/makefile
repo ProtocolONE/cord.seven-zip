@@ -1,6 +1,7 @@
 NEW_COMPILER=1
 PROG = 7za.lib
 STATIC_LIB=1
+NO_DEFAULT_RES=1
 
 #LFLAGS = $(LFLAGS) /DEBUG /Zi 
 #CFLAGS = $(CFLAGS)  /Zi 
@@ -180,7 +181,6 @@ ZIP_OBJS = \
   $O\ZipOut.obj \
   $O\ZipUpdate.obj \
   $O\ZipRegister.obj \
-
 
 !include "../../Aes.mak"
 !include "../../Crc.mak"

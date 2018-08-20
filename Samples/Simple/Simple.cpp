@@ -63,8 +63,7 @@ std::vector<unsigned char> readFile(const TCHAR* filename)
 
 int ExtractArchive(int argc, TCHAR** argv)
 {
-	if (argc < 4)
-	{
+	if (argc < 4) {
 		return PrintUsage();
 	}
 

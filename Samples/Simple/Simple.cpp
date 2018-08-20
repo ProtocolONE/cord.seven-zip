@@ -1,5 +1,3 @@
-
-
 #include <stdio.h>
 #include <tchar.h>
 #include "../../SevenZip++/SevenZipCompressor.h"
@@ -84,7 +82,9 @@ int ExtractArchive(int argc, TCHAR** argv)
   //extractor.ExtractArchiveFromMemory(memoryArchive, destination);
   extractor.ExtractArchiveFromMemory(memoryArchive, result);
 
-  std::cout << result[L"update.crc"].data() << std::endl;
+  std::string tmp((char*)result[L"update.crc"].data(), result[L"update.crc"].size());
+
+  std::cout << tmp.c_str() << std::endl;
 	return 0;
 }
 

@@ -21,6 +21,9 @@
 *.log
 *.sbr
 *.sdf
+*.obj
+*.pdb
+*.pch
 *.opensdf
 *.unsuccessfulbuild
 ipch/
@@ -64,7 +67,4 @@ packages/
 
 !build/
 !obj/
-.idea/
-rebuild.bat
-/!help/html
-/!obj/qml
+.vs/

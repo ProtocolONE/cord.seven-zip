@@ -1,0 +1,15 @@
+[settings]
+os=Windows
+arch=x86
+compiler=Visual Studio
+compiler.version=15
+compiler.runtime=MD
+compiler.toolset=v141_xp
+build_type=Release
+os_build=Windows
+arch_build=x86
+
+[options]
+shared=False
+[build_requires]
+[env]

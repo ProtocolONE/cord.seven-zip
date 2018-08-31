@@ -22,9 +22,11 @@
 
 #include "IArchive.h"
 
-HINSTANCE g_hInstance;
+HINSTANCE g_hInstance = NULL;
 
 #define NT_CHECK_FAIL_ACTION return FALSE;
+
+#ifndef STATIC_LIB
 
 #ifdef _WIN32
 extern "C"
@@ -50,6 +52,8 @@ BOOL WINAPI DllMain(
   */
   return TRUE;
 }
+#endif
+
 #endif
 
 DEFINE_GUID(CLSID_CArchiveHandler,

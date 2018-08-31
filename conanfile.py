@@ -58,7 +58,6 @@ class CoreConan(ConanFile):
 
     def package(self):
         self.copy("*.h", dst="include/SevenZip", src="SevenZip++")
-        self.copy("*.cpp", dst="include/SevenZip", src="SevenZip++")
         self.copy("SevenZip++*.lib", dst="lib", keep_path=False)
         self.copy("SevenZip++*.dll", dst="bin", keep_path=False)
         self.copy("SevenZip++*.dylib*", dst="lib", keep_path=False)

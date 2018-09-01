@@ -65,7 +65,7 @@ class CoreConan(ConanFile):
         self.copy("SevenZip++*.a", dst="lib", keep_path=False)
 
     def package_info(self):
-      name = "SevenZip++"
+      name = "SevenZip"
         
       if self.settings.build_type == "Debug":
         name += "d"

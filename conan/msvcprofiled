@@ -2,14 +2,16 @@
 os=Windows
 arch=x86
 compiler=Visual Studio
-compiler.version=15
-compiler.runtime=MD
-compiler.toolset=v141_xp
-build_type=Release
+compiler.version=12
+compiler.runtime=MDd
+compiler.toolset=v120_xp
+build_type=Debug
 os_build=Windows
 arch_build=x86
 
 [options]
 shared=False
+
 [build_requires]
+
 [env]

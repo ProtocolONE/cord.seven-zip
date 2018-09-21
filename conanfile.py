@@ -1,5 +1,6 @@
 import os
 from conans import ConanFile, MSBuild, VisualStudioBuildEnvironment, tools
+from conans.util.files import tmp_file
 
 componentName = "SevenZip"
 
@@ -12,7 +13,7 @@ class CoreConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = "shared=False"
-    generators = "visual_studio"
+    generators = "visual_studio_multi"
 
     scm = {
       "type": "git",
@@ -47,14 +48,48 @@ class CoreConan(ConanFile):
       
         os.chdir("../../../../../..")
         os.chdir('SevenZip++')
-        msbuild = MSBuild(self)
-        msbuild.build(
-        "SevenZip++.vcxproj".format(componentName)
-         , platforms={ 
-            "x86" : "Win32"
-            ,'x86_64' : 'x64'
-          }
-        )
+        
+        libMachine = {
+          "x86" : "MachineX86"
+          ,'x86_64' : 'MachineX64'
+        }.get(self.settings.get_safe("arch"), "")
+        
+        libMachine_node = "<Lib>" \
+                       "<TargetMachine>{}</TargetMachine>" \
+                       "</Lib>".format(libMachine) if libMachine else ""
+                       
+        runtime_library = {"MT": "MultiThreaded",
+                     "MTd": "MultiThreadedDebug",
+                     "MD": "MultiThreadedDLL",
+                     "MDd": "MultiThreadedDebugDLL"}.get(self.settings.get_safe("compiler.runtime"), "")
+
+        runtime_node = "<RuntimeLibrary>" \
+                       "{}" \
+                       "</RuntimeLibrary>".format(runtime_library) if runtime_library else ""
+
+        props_file_contents = """<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemDefinitionGroup>
+    {0}
+    <ClCompile>
+      {1}
+    </ClCompile>
+    
+  </ItemDefinitionGroup>
+</Project>""".format(libMachine_node, runtime_node)
+        with tmp_file(props_file_contents) as props_file_path:
+          msbuild = MSBuild(self)
+          msbuild.build(
+            "SevenZip++.vcxproj"
+           , toolset = self.settings.compiler.toolset
+           , platforms={ 
+              "x86" : "Win32"
+              ,'x86_64' : 'x64'
+            }
+           , properties = {
+              "ForceImportBeforeCppTargets" : props_file_path
+            }
+          )
 
     def package(self):
         self.copy("*.h", dst="include/SevenZip", src="SevenZip++")

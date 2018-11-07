@@ -2,6 +2,9 @@
 
 #include "register.h"
 
+#include "../Common/RegisterCodec.h"
+
+
 #define DECLARE_REG_GETTER(nm) namespace nm { extern void* __stdcall getRegInfo(); }
 #define CALL_REG_GETTER(nm) NArchive::nm::getRegInfo();
 
@@ -46,6 +49,28 @@ namespace NCompress {
   DECLARE_CODEC_GETTER2(Copy);
 }
 
+#include "../Compress/BcjCoder.h"
+namespace NCompress {
+  namespace NBcj {
+
+    REGISTER_FILTER_E(BCJ,
+      CCoder(false),
+      CCoder(true),
+      0x3030103, "BCJ")
+
+  }
+}
+
+//
+//void registerCodecBCJ()
+//{
+//  REGISTER_FILTER_E(BCJ,
+//    CCoder(false),
+//    CCoder(true),
+//    0x3030103, "BCJ")
+//
+//}
+
 void registerAll()
 {
   CALL_REG_GETTER(N7z);
@@ -83,7 +108,9 @@ void registerAll()
   //registerArcTar();
   //registerArcZip();
   //registerCodecBCJ2();
+  
   //registerCodecBCJ();
+
   //registerCodecBCJ();
   //registerCodecByteSwap();
   //registerCodecBZip2();
